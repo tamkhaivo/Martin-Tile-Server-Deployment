@@ -1,0 +1,20 @@
+services:
+  martin:
+    image: ghcr.io/maplibre/martin:latest
+    ports:
+      - "3000:3000"
+    # Serve tiles from a remote PMTiles file (Protomaps daily OSM build).
+    # Martin fetches tiles on-demand via HTTP range requests — no local data needed.
+    command: --webui enable-for-all https://build.protomaps.com/20260210.pmtiles
+    restart: unless-stopped
+
+  viewer:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./viewer/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./viewer/index.html:/usr/share/nginx/html/index.html:ro
+    depends_on:
+      - martin
+    restart: unless-stopped
