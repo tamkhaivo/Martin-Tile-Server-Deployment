@@ -14,7 +14,7 @@ services:
       - "8080:80"
     volumes:
       - ./viewer/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./viewer/index.html:/usr/share/nginx/html/index.html:ro
+      - ./viewer:/usr/share/nginx/html:ro
     depends_on:
       - martin
     restart: unless-stopped
